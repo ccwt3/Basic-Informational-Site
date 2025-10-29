@@ -10,51 +10,32 @@ const directory = {
 }
 
 server.on('request', (request, res) => {
-  res.writeHead(200, { 'content-type': 'text/html' });
   if (request.url === '/') {
-    fs.readFile(directory.index, 'utf-8', (err, data) => {    
-      if (err) {
-        res.end();
-        return 500;
-      } else {
-        res.write(data);
-        res.end()
-      }
-    })
+    handleRequest('index', res, 200);
   }
   else if (request.url === '/about') {
-    fs.readFile(directory.about, 'utf-8', (err, data) => {    
-      if (err) {
-        res.end();
-        return 500;
-      } else {
-        res.write(data);
-        res.end()
-      }
-    })
+    handleRequest('about', res, 200);
   }
   else if (request.url === '/contact-me') {
-    fs.readFile(directory.contact, 'utf-8', (err, data) => {    
-      if (err) {
-        res.end();
-        return 500;
-      } else {
-        res.write(data);
-        res.end()
-      }
-    })
+    handleRequest('contact', res, 200);
   }
   else {
-    fs.readFile(directory.notFound, 'utf-8', (err, data) => {    
-      if (err) {
-        res.end();
-        return 500;
-      } else {
-        res.write(data);
-        res.end()
-      }
-    })
+    handleRequest('notFound', res, 404);
   }
 })
 
 server.listen(8080);
+
+function handleRequest(key, res, code) {
+  fs.readFile(directory[key], 'utf-8', (err, data) => {
+    if (err) {
+      res.writeHead(500, { 'content-type': 'text/html' });
+      res.end();
+      return 500;
+    } else {
+      res.writeHead(code, { 'content-type': 'text/html' });
+      res.write(data);
+      res.end();
+    }
+  })
+}
