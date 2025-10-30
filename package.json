@@ -1,0 +1,25 @@
+{
+  "name": "basic-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "node --watch index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccwt3/Basic-Informational-Site.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ccwt3/Basic-Informational-Site/issues"
+  },
+  "homepage": "https://github.com/ccwt3/Basic-Informational-Site#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

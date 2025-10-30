@@ -1,41 +1,34 @@
-import http from 'node:http';
-import fs from 'node:fs';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const server = http.createServer();
-const directory = {
-  index: 'C:/Users/cacaw/Documents/Visual_studio/Fullstack-Course/NODE JS/Basic Project/index.html',
-  about: 'C:/Users/cacaw/Documents/Visual_studio/Fullstack-Course/NODE JS/Basic Project/about.html',
-  contact: 'C:/Users/cacaw/Documents/Visual_studio/Fullstack-Course/NODE JS/Basic Project/contact-me.html',
-  notFound: 'C:/Users/cacaw/Documents/Visual_studio/Fullstack-Course/NODE JS/Basic Project/404.html',
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-server.on('request', (request, res) => {
-  if (request.url === '/') {
-    handleRequest('index', res, 200);
-  }
-  else if (request.url === '/about') {
-    handleRequest('about', res, 200);
-  }
-  else if (request.url === '/contact-me') {
-    handleRequest('contact', res, 200);
-  }
-  else {
-    handleRequest('notFound', res, 404);
-  }
-})
+const app = express();
+const PORT = 3000;
 
-server.listen(8080);
+// Página principal
+app.get('/', (req, res) => {
+  res.sendFile('index.html', { root: path.join(__dirname, 'pages') });
+});
 
-function handleRequest(key, res, code) {
-  fs.readFile(directory[key], 'utf-8', (err, data) => {
-    if (err) {
-      res.writeHead(500, { 'content-type': 'text/html' });
-      res.end();
-      return 500;
-    } else {
-      res.writeHead(code, { 'content-type': 'text/html' });
-      res.write(data);
-      res.end();
-    }
-  })
-}
+// Página "About"
+app.get('/about', (req, res) => {
+  res.sendFile('about.html', { root: path.join(__dirname, 'pages') });
+});
+
+// Página "Contact"
+app.get('/contact-me', (req, res) => {
+  res.sendFile('contact-me.html', { root: path.join(__dirname, 'pages') });
+});
+
+// Página 404 (para todo lo demás)
+app.use((req, res) => {
+  res.status(404).sendFile('404.html', { root: path.join(__dirname, 'pages') });
+});
+
+app.listen(PORT, (error) => {
+  if (error) throw error;
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
